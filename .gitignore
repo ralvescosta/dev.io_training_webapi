@@ -1,0 +1,8 @@
+src/DevIO.Api/bin
+src/DevIO.Api/obj
+
+src/DevIO.Business/bin
+src/DevIO.Business/obj
+
+src/DevIO.Data/bin
+src/DevIO.Data/obj
