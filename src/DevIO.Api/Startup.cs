@@ -21,14 +21,11 @@ namespace DevIO.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<MeuDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.ResolveDependencies();
-
-            services.AddDbContext<MeuDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
 
             services.AddSwaggerGen(c =>
             {
