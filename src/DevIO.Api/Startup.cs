@@ -37,6 +37,16 @@ namespace DevIO.Api
             {
                 options.SuppressModelStateInvalidFilter = false;
             });
+
+            services.AddCors(options => 
+            {
+                options.AddPolicy("Desenvolvimento", 
+                    builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -53,6 +63,8 @@ namespace DevIO.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("Desenvolvimento");
 
             app.UseEndpoints(endpoints =>
             {
