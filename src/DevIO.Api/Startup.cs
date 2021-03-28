@@ -44,8 +44,7 @@ namespace DevIO.Api
                     builder => builder
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
+                        .AllowAnyHeader());
             });
         }
 

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\imagens\" />
+    <Folder Include="wwwroot\app\demo-webapi\src\assets\" />
   </ItemGroup>
 
 </Project>
