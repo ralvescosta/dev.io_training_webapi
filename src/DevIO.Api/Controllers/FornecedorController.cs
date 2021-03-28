@@ -14,40 +14,38 @@ namespace DevIO.Api.Controllers
     {
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IFornecedorService _fornecedorService;
+        private readonly IEnderecoRepository _enderecoRepository;
         private readonly IMapper _mapper;
 
         public FornecedoresController(
             IFornecedorRepository fornecedorRepository,
             IMapper mapper,
-            IFornecedorService fornecedorService
-        )
+            IFornecedorService fornecedorService,
+            INotificador notificador, 
+            IEnderecoRepository enderecoRepository) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
             _fornecedorService = fornecedorService;
+            _enderecoRepository = enderecoRepository;
         }
 
         [HttpPost]
         public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
         {
             if (!ModelState.IsValid) 
-                return BadRequest();
+                return CustomResponse(ModelState);
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
-            var resultado = await _fornecedorService.Adicionar(fornecedor);
+            await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));
 
-            if (!resultado)
-                return BadRequest();
-
-            return 
-                Ok(fornecedor);
+            return CustomResponse(fornecedorViewModel);
         }
 
         [HttpGet]
-        public async Task<IEnumerable<FornecedorViewModel>> ObterTodos()
+        public async Task<ActionResult<IEnumerable<FornecedorViewModel>>> ObterTodos()
         {
             var fornecedor = _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.ObterTodos());
-            return fornecedor;
+            return CustomResponse(fornecedor);
         }
 
         [HttpGet("{id:guid}")]
@@ -58,7 +56,18 @@ namespace DevIO.Api.Controllers
             if (fornecedor == null)
                 return NotFound();
 
-            return fornecedor;
+            return CustomResponse(fornecedor);
+        }
+
+        [HttpGet("obter-endereco/{id:guid}")]
+        public async Task<ActionResult<FornecedorViewModel>> ObterEnderecoPorId(Guid id)
+        {
+            var fornecedor = _mapper.Map<FornecedorViewModel>(await _enderecoRepository.ObterPorId(id));
+
+            if (fornecedor == null)
+                return NotFound();
+
+            return CustomResponse(fornecedor);
         }
 
         [HttpPut("{id:guid}")]
@@ -68,16 +77,25 @@ namespace DevIO.Api.Controllers
                 return BadRequest();
 
             if (!ModelState.IsValid) 
+                return CustomResponse(ModelState);
+
+            await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+
+            return CustomResponse(fornecedorViewModel);
+        }
+
+        [HttpPut("atualiza-endereco/{id:guid}")]
+        public async Task<ActionResult<FornecedorViewModel>> AtualizarEndereco(Guid id, EnderecoViewModel enderecoViewModel)
+        {
+            if (id != enderecoViewModel.Id)
                 return BadRequest();
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
-            var resultado = await _fornecedorService.Atualizar(fornecedor);
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
 
-            if (!resultado)
-                return BadRequest();
+            await _fornecedorService.AtualizarEndereco(_mapper.Map<Endereco>(enderecoViewModel));
 
-            return 
-                Ok(fornecedor);
+            return CustomResponse(enderecoViewModel);
         }
 
         [HttpDelete("{id:guid}")]
@@ -88,12 +106,9 @@ namespace DevIO.Api.Controllers
             if (fornecedor == null) 
                 return NotFound();
 
-            var resultado = await _fornecedorService.Remover(id);
+            await _fornecedorService.Remover(id);
 
-            if (!resultado)
-                return BadRequest();
-
-            return Ok(fornecedor);
+            return CustomResponse(fornecedor);
         }
     }
 }
