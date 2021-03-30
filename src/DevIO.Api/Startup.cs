@@ -22,7 +22,7 @@ namespace DevIO.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MeuDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddIdentityConfiguration(Configuration);
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.ResolveDependencies();
@@ -38,7 +38,7 @@ namespace DevIO.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevIO.Api v1"));
             }
-
+            app.UseAuthentication();
             app.UseConfiguration();
         }
     }
