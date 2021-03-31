@@ -19,18 +19,21 @@ namespace DevIO.Api.Controllers
         private readonly IFornecedorService _fornecedorService;
         private readonly IEnderecoRepository _enderecoRepository;
         private readonly IMapper _mapper;
+        private readonly IUser _user;
 
         public FornecedoresController(
             IFornecedorRepository fornecedorRepository,
             IMapper mapper,
             IFornecedorService fornecedorService,
             INotificador notificador, 
-            IEnderecoRepository enderecoRepository) : base(notificador)
+            IEnderecoRepository enderecoRepository,
+            IUser user) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
             _fornecedorService = fornecedorService;
             _enderecoRepository = enderecoRepository;
+            _user = user;
         }
 
         [HttpPost]

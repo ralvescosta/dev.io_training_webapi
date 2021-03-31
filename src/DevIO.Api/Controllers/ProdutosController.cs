@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevIO.Api.Extensions;
 using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
@@ -28,6 +29,7 @@ namespace DevIO.Api.Controllers
         }
 
         [HttpPost]
+        [ClaimsAuthorize("Fornecedor", "Adicionar")]
         public async Task<ActionResult<ProdutoViewModel>> Adicionar(ProdutoViewModel produtoViewModel)
         {
             if (!ModelState.IsValid)
@@ -48,6 +50,7 @@ namespace DevIO.Api.Controllers
 
         [RequestSizeLimit(40000000)]
         [HttpPost("adicionar")]
+        [ClaimsAuthorize("Fornecedor", "Adicionar")]
         public async Task<ActionResult<ProdutoViewModel>> AdicionarAlternativo(ProdutoImagemViewModel produtoImagemViewModel)
         {
             if (!ModelState.IsValid)
@@ -81,6 +84,7 @@ namespace DevIO.Api.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         public async Task<ActionResult> Atualizar(Guid id, ProdutoViewModel produtoViewModel)
         {
             if (id != produtoViewModel.Id)
@@ -117,6 +121,7 @@ namespace DevIO.Api.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [ClaimsAuthorize("Fornecedor", "Excluir")]
         public async Task<ActionResult<ProdutoViewModel>> Excluir(Guid id)
         {
             var produto = await _produtoRepository.ObterPorId(id);
