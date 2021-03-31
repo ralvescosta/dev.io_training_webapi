@@ -6,11 +6,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace DevIO.Api
 {
-    public class Startup
+  public class Startup
     {
         public Startup(IConfiguration configuration)
         {
