@@ -32,12 +32,14 @@ namespace DevIO.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevIO.Api v1"));
-            }
+#if DEBUG
+            app.UseDeveloperExceptionPage();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevIO.Api v1"));
+#else
+            app.UseHsts();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevIO.Api Release v1"));
+#endif
+            app.UseSwagger();
             app.UseAuthentication();
             app.UseConfiguration();
         }
