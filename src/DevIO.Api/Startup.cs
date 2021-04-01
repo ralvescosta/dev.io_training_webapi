@@ -1,12 +1,13 @@
+using DevIO.Api.Configuration;
 using DevIO.Api.Configurations;
 using DevIO.Api.Extensions;
 using DevIO.Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace DevIO.Api
 {
@@ -28,18 +29,17 @@ namespace DevIO.Api
             services.ResolveDependencies();
 
             services.AddWebApiConfig();
+            services.AddSwaggerConfig();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
 #if DEBUG
             app.UseDeveloperExceptionPage();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevIO.Api v1"));
 #else
             app.UseHsts();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevIO.Api Release v1"));
 #endif
-            app.UseSwagger();
+            app.UseSwaggerConfig(provider);
             app.UseAuthentication();
             app.UseConfiguration();
         }

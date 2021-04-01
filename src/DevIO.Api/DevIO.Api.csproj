@@ -22,6 +22,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="V2\" />
     <Folder Include="wwwroot\app\demo-webapi\src\assets\" />
   </ItemGroup>
 

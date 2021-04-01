@@ -9,10 +9,7 @@ namespace DevIO.Api.Extensions
     {
         public static IServiceCollection AddWebApiConfig(this IServiceCollection services) 
         {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DevIO.Api", Version = "v1" });
-            });
+            
 
             services.AddApiVersioning(options => 
             {
