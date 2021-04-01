@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DevIO.Api
 {
-  public class Startup
+    public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -30,6 +30,7 @@ namespace DevIO.Api
 
             services.AddWebApiConfig();
             services.AddSwaggerConfig();
+            services.AddLoggingConfiguration(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
@@ -43,6 +44,7 @@ namespace DevIO.Api
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication();
             app.UseConfiguration();
+            app.UseLoggingConfiguration();
         }
     }
 }
