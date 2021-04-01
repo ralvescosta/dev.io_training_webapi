@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using DevIO.Api.Controllers;
 using DevIO.Api.Extensions;
 using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,17 +12,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace DevIO.Api.Controllers
+namespace DevIO.Api.V1.Controllers
 {
-    [Route("api/produtos")]
+    [Authorize]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/produtos")]
     public class ProdutosController : MainController
     {
         private readonly IProdutoRepository _produtoRepository;
         private readonly IProdutoService _produtoService;
         private readonly IMapper _mapper;
-        public ProdutosController(INotificador notificador, 
-                                  IProdutoRepository produtoRepository, 
-                                  IProdutoService produtoService, 
+        public ProdutosController(INotificador notificador,
+                                  IProdutoRepository produtoRepository,
+                                  IProdutoService produtoService,
                                   IMapper mapper) : base(notificador)
         {
             _produtoRepository = produtoRepository;
@@ -98,10 +102,10 @@ namespace DevIO.Api.Controllers
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
 
-            if(produtoViewModel.ImagemUpload != null)
+            if (produtoViewModel.ImagemUpload != null)
             {
                 var imagemNome = Guid.NewGuid() + "_" + produtoViewModel.Imagem;
-                if(!UpdateArquivo(produtoViewModel.ImagemUpload, imagemNome))
+                if (!UpdateArquivo(produtoViewModel.ImagemUpload, imagemNome))
                 {
                     return CustomResponse(ModelState);
                 }
@@ -117,7 +121,7 @@ namespace DevIO.Api.Controllers
             await _produtoService.Atualizar(_mapper.Map<Produto>(produtoAtualizacao));
 
             return CustomResponse(produtoViewModel);
-                
+
         }
 
         [HttpDelete("{id:guid}")]
@@ -151,7 +155,7 @@ namespace DevIO.Api.Controllers
             }
 
             System.IO.File.WriteAllBytes(caminhoArquivo, imageDataByteArray);
-            return true;            
+            return true;
         }
 
         private async Task<bool> UpdateArquivoAlternativo(IFormFile arquivo, string imgPrefixo)

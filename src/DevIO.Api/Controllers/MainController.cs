@@ -25,14 +25,14 @@ namespace DevIO.Api.Controllers
         {
             if (OperacaoValida())
             {
-                return Ok(new 
+                return Ok(new
                 {
                     success = true,
                     data = resultado
                 });
             }
 
-            return BadRequest(new 
+            return BadRequest(new
             {
                 success = false,
                 errors = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
@@ -41,7 +41,7 @@ namespace DevIO.Api.Controllers
 
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
         {
-            if (!modelState.IsValid) 
+            if (!modelState.IsValid)
                 NotificarErroModelInvalida(modelState);
 
             return CustomResponse();
@@ -51,7 +51,7 @@ namespace DevIO.Api.Controllers
         {
             var erros = modelState.Values.SelectMany(e => e.Errors);
 
-            foreach(var erro in erros)
+            foreach (var erro in erros)
             {
                 var errorMsg = erro.Exception == null ? erro.ErrorMessage : erro.Exception.Message;
                 NotificarErro(errorMsg);

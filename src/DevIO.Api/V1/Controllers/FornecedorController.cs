@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevIO.Api.Controllers;
 using DevIO.Api.Extensions;
 using DevIO.Api.ViewModels;
 using DevIO.Business.Intefaces;
@@ -9,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DevIO.Api.Controllers
+namespace DevIO.Api.V1.Controllers
 {
-    [Route("api/fornecedores")]
     [Authorize]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/fornecedores")]
     public class FornecedoresController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
@@ -25,7 +27,7 @@ namespace DevIO.Api.Controllers
             IFornecedorRepository fornecedorRepository,
             IMapper mapper,
             IFornecedorService fornecedorService,
-            INotificador notificador, 
+            INotificador notificador,
             IEnderecoRepository enderecoRepository,
             IUser user) : base(notificador)
         {
@@ -40,7 +42,7 @@ namespace DevIO.Api.Controllers
         [ClaimsAuthorize("Fornecedor", "Adicionar")]
         public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
 
             await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));
@@ -81,10 +83,10 @@ namespace DevIO.Api.Controllers
         [ClaimsAuthorize("Fornecedor", "Atualizar")]
         public async Task<ActionResult<FornecedorViewModel>> Atualizar(Guid id, FornecedorViewModel fornecedorViewModel)
         {
-            if (id != fornecedorViewModel.Id) 
+            if (id != fornecedorViewModel.Id)
                 return BadRequest();
 
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
 
             await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
@@ -113,7 +115,7 @@ namespace DevIO.Api.Controllers
         {
             var fornecedor = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(id));
 
-            if (fornecedor == null) 
+            if (fornecedor == null)
                 return NotFound();
 
             await _fornecedorService.Remover(id);
