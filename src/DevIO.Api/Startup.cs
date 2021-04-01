@@ -40,6 +40,7 @@ namespace DevIO.Api
             app.UseHsts();
 #endif
             app.UseSwaggerConfig(provider);
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication();
             app.UseConfiguration();
         }
