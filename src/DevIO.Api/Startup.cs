@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DevIO.Api
 {
-    public class Startup
+  public class Startup
     {
         public Startup(IConfiguration configuration)
         {
